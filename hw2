@@ -1,0 +1,25 @@
+db.getCollection('students').aggregate([
+    {
+        $match: {class: {$exists: true}}
+    },
+    {
+        $group: {
+            _id: '$class',
+            avgClassScore: {
+                $avg: "$avgScore"
+            }
+        }
+    },
+    {
+        $sort: {avgClassScore: -1}
+    },
+
+    {$limit: 1},
+    {
+        $project: {
+            bestClass: '$_id',
+            avgClassScore: true,
+            _id: false
+        }
+    }
+])
